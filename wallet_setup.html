@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>vARRR Wallet Setup</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    text-align: center;
+  }
+  h1 {
+    margin: 80px auto 40px;
+  }
+  .step {
+    margin: 60px auto 20px;
+  }
+  button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    width: 200px;
+    cursor: pointer;
+  }
+  .img_btn {
+    margin: 10px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+  }
+
+  .img_btn img {
+    height: 20px;
+    margin-right: 10px;
+  }
+</style>
+<script>
+  window.onload = function() {
+    // URLs for token logos
+    const tBTC_LOGO = "https://assets.coingecko.com/coins/images/11224/standard/0x18084fba666a33d37592fa2633fd49a74dd93a88.png";
+    const wstETH_LOGO = "https://assets.coingecko.com/coins/images/18834/standard/wstETH.png";
+    const crvUSD_LOGO = "https://assets.coingecko.com/coins/images/30118/standard/crvusd.jpeg";
+  
+    // Set the 'src' attribute of each logo image 
+    document.getElementById('tBTCLogo').src = tBTC_LOGO;
+    document.getElementById('wstETHLogo').src = wstETH_LOGO;
+    document.getElementById('crvUSDLogo').src = crvUSD_LOGO;
+  
+    // Modify the addToken function to include the image parameter
+    window.addToken = async function(address, symbol, decimals) {
+      // Retrieve the logo URL based on the symbol
+      const logoURL = (symbol === 'tBTC' ? tBTC_LOGO : symbol === 'wstE' ? wstETH_LOGO : crvUSD_LOGO);
+  
+      try {
+        // Check if MetaMask is installed
+        if (typeof window.ethereum !== 'undefined') {
+          await window.ethereum.request({
+            method: 'wallet_watchAsset',
+            params: {
+              type: 'ERC20',
+              options: {
+                address: address,
+                symbol: symbol,
+                decimals: decimals,
+                image: logoURL
+              }
+            }
+          });
+        } else {
+          alert('MetaMask is not installed!');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  };
+  </script>
+</head>
+<body>
+<h1>vARRR Metamask Setup</h1>
+
+<div class="step">
+  <h2>Step 1 - Install MetaMask</h2>
+  <p>If you don't have MetaMask installed, you can download it here:</p>
+  <button onclick="window.open('https://metamask.io/download/', '_blank')">Install MetaMask</button>
+</div>
+
+<div class="step">
+  <h2>Step 2 - Switch to the Goerli Testnet</h2>
+  <button onclick="switchToGoerli()">Switch to Goerli Testnet</button>
+</div>
+
+<div class="step">
+  <h2>Step 3 - Add Testnet Token Contracts</h2>
+  <button id="addTBTC" class="img_btn" onclick="addToken('0x8e168d715b2b75419c4286c9eBa0B7e3713F1AcF', 'tBTC', 18)">
+    <img id="tBTCLogo" alt="tBTC Logo"> Add tBTC
+  </button>
+  
+  <button id="addWstETH" class="img_btn" onclick="addToken('0xc65387eC96Ba058De47DE35372C6f7c6f0a8D378', 'wstE', 18)">
+    <img id="wstETHLogo" alt="wstETH Logo"> Add wstETH
+  </button>
+  
+  <button id="addCrvUSD" class="img_btn" onclick="addToken('0xCbE8Ba039ccc941bD950aa2080217D6450A838d2', 'crvU', 18)">
+    <img id="crvUSDLogo" alt="crvUSD Logo"> Add crvUSD
+  </button>
+
+</div>
+</body>
+</html>
