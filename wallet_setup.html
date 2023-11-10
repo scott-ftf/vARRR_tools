@@ -41,12 +41,12 @@
     const wstETH_LOGO = "https://assets.coingecko.com/coins/images/18834/standard/wstETH.png";
     const crvUSD_LOGO = "https://assets.coingecko.com/coins/images/30118/standard/crvusd.jpeg";
   
-    // Set the 'src' attribute of each logo image 
+    // Set the 'src' to button image
     document.getElementById('tBTCLogo').src = tBTC_LOGO;
     document.getElementById('wstETHLogo').src = wstETH_LOGO;
     document.getElementById('crvUSDLogo').src = crvUSD_LOGO;
   
-    // Modify the addToken function to include the image parameter
+    // Add token to wallet
     window.addToken = async function(address, symbol, decimals) {
       // Retrieve the logo URL based on the symbol
       const logoURL = (symbol === 'tBTC' ? tBTC_LOGO : symbol === 'wstE' ? wstETH_LOGO : crvUSD_LOGO);
@@ -73,6 +73,23 @@
         console.error(error);
       }
     };
+
+    // Switch Metamask to the testnet
+    window.switchToGoerli = async function() {
+    try {
+      // Check if MetaMask is installed
+      if (typeof window.ethereum !== 'undefined') {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0x5' }], // Chain ID for Goerli Testnet
+        });
+      } else {
+        alert('MetaMask is not installed!');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   };
   </script>
 </head>
